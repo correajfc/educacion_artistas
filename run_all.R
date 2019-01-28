@@ -110,7 +110,16 @@ artistas_titulos_instituciones %>% View()
         rename(cantidad=n) %>% 
         write_csv("output_data/resumen_artista_estudios.csv")
     
-  
+    matriz_datos %>% 
+        mutate(fecha_nacimiento=ymd(glue("{ano_de_nacimiento}-1-1"))) %>% 
+        mutate(exhibiciones_colectivas_cantidad=as.numeric(exhibiciones_colectivas_cantidad),
+               exhibiciones_individuales_cantidad=as.numeric(exhibiciones_individuales_cantidad)) %>%
+        replace_na(list(exhibiciones_individuales_cantidad = 0, 
+                        exhibiciones_colectivas_cantidad = 0)) %>% 
+        mutate(total_expos=exhibiciones_colectivas_cantidad+exhibiciones_individuales_cantidad) %>% 
+        select(fecha_nacimiento,nombre,total_expos,genero,pais) %>% 
+        write_csv("output_data/resumen_artista_expos.csv")
+    
     
     matriz_datos %>% 
         mutate(fecha_nacimiento=ymd(glue("{ano_de_nacimiento}-1-1"))) %>% 
